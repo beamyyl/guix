@@ -15,7 +15,7 @@ if grep -q "%desktop-services" /etc/config.scm; then
                                   %default-substitute-urls))
                          (authorized-keys
                           (append (list (local-file "/etc/nonguix-signing-key.pub"))
-                                  %default-authorized-guix-keys))))' /etc/config.scm -i
+                                  %default-authorized-guix-keys))))' /etc/config.scm
 else
     guix shell sd -- sd '(%base-services))' '(%base-services)
      (guix-service-type config =>
@@ -26,7 +26,7 @@ else
                                   %default-substitute-urls))
                          (authorized-keys
                           (append (list (local-file "/etc/nonguix-signing-key.pub"))
-                                  %default-authorized-guix-keys))))' /etc/config.scm -i
+                                  %default-authorized-guix-keys))))' /etc/config.scm
 fi
 
 echo "Pull by runnning 'gpull', 'hash guix' and then rebuild by running the 'firstreconfigure.sh' script"!
