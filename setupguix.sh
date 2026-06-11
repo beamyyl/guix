@@ -16,4 +16,4 @@ sudo awk '
     print $0
 }' /etc/config.scm > /tmp/config.tmp && sudo mv /tmp/config.tmp /etc/config.scm
 
-echo "Pull by runnning 'gpull', 'hash guix' and then rebuild by running the 'firstreconfigure.sh' script"!
+echo "Pull by runnning 'gpull', 'hash guix' and then rebuild by running the 'firstreconfigure.sh' script!"
