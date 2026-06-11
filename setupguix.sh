@@ -7,13 +7,10 @@ sudo cp channels.scm /etc/guix/channels.scm
 
 sudo awk '
 {
-    # Check if this line contains your base or desktop service list definition
     if ($0 ~ /%desktop-services/ || $0 ~ /%base-services/) {
-        # Find where the service name starts so we can slice it
         match($0, /%[a-z\-]+services/)
         service_name = substr($0, RSTART, RLENGTH)
-        
-        # Replace the raw service name with the proper modify-services macro block wrapper
+
         gsub(/%[a-z\-]+services/, "(modify-services " service_name "\n     (guix-service-type config =>\n                        (guix-configuration\n                         (inherit config)\n                         (substitute-urls\n                          (append (list \"https://nonguix.org\")\n                                  %default-substitute-urls))\n                         (authorized-keys\n                          (append (list (local-file \"/etc/nonguix-signing-key.pub\"))\n                                  %default-authorized-guix-keys)))))", $0)
     }
     print $0
