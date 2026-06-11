@@ -6,7 +6,7 @@ echo 'alias gpull="rm -rf /tmp/guix-fast /root/.cache/guix && git clone --depth=
 sudo cp channels.scm /etc/guix/channels.scm
 
 if grep -q "%desktop-services" /etc/config.scm; then
-    guix shell sd -- sd '\(%desktop-services\)\)' '(%desktop-services)
+    guix shell sd -- sd -s '(%desktop-services))' '(%desktop-services)
      (guix-service-type config =>
                         (guix-configuration
                          (inherit config)
@@ -17,7 +17,7 @@ if grep -q "%desktop-services" /etc/config.scm; then
                           (append (list (local-file "/etc/nonguix-signing-key.pub"))
                                   %default-authorized-guix-keys))))' /etc/config.scm
 else
-    guix shell sd -- sd '\(%base-services\)\)' '(%base-services)
+    guix shell sd -- sd -s '(%base-services))' '(%base-services)
      (guix-service-type config =>
                         (guix-configuration
                          (inherit config)
