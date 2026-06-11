@@ -7,18 +7,16 @@ sudo cp channels.scm /etc/guix/channels.scm
 
 sudo awk '
 {
-    print $0
+    # Check if this line contains your base or desktop service list definition
     if ($0 ~ /%desktop-services/ || $0 ~ /%base-services/) {
-        print "     (guix-service-type config =>"
-        print "                        (guix-configuration"
-        print "                         (inherit config)"
-        print "                         (substitute-urls"
-        print "                          (append (list \"https://substitues.nonguix.org\")"
-        print "                                  %default-substitute-urls))"
-        print "                         (authorized-keys"
-        print "                          (append (list (local-file \"/etc/nonguix-signing-key.pub\"))"
-        print "                                  %default-authorized-guix-keys))))"
+        # Find where the service name starts so we can slice it
+        match($0, /%[a-z\-]+services/)
+        service_name = substr($0, RSTART, RLENGTH)
+        
+        # Replace the raw service name with the proper modify-services macro block wrapper
+        gsub(/%[a-z\-]+services/, "(modify-services " service_name "\n     (guix-service-type config =>\n                        (guix-configuration\n                         (inherit config)\n                         (substitute-urls\n                          (append (list \"https://nonguix.org\")\n                                  %default-substitute-urls))\n                         (authorized-keys\n                          (append (list (local-file \"/etc/nonguix-signing-key.pub\"))\n                                  %default-authorized-guix-keys)))))", $0)
     }
+    print $0
 }' /etc/config.scm > /tmp/config.tmp && sudo mv /tmp/config.tmp /etc/config.scm
 
 echo "Pull by runnning 'gpull', 'hash guix' and then rebuild by running the 'firstreconfigure.sh' script"!
